@@ -1,0 +1,10 @@
+Hello, welcome to the world of Go programming.
+This is a simple text file created for practice.
+Go is a statically typed, compiled language.
+It was designed at Google by Robert Griesemer, Rob Pike, and Ken Thompson.
+Go is known for its simplicity and efficiency.
+Concurrency is one of Go's strongest features.
+The standard library in Go is extensive and well-documented.
+Buffered I/O in Go is handled by the bufio package.
+Learning Go opens doors to building scalable applications.
+Keep coding and keep exploring new possibilities.
