@@ -37,7 +37,7 @@ func makeRequest(questions string) openai.ChatCompletionNewParams {
 
 	return openai.ChatCompletionNewParams{
 		Model:       model,
-		MaxTokens:   openai.Int(int64(maxToken)),
+		MaxCompletionTokens:   openai.Int(int64(maxToken)),
 		Temperature: openai.Float(temperature),
 		Messages: []openai.ChatCompletionMessageParamUnion{
 			openai.UserMessage(questions),
