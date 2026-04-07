@@ -5,29 +5,55 @@ import (
 	"sync"
 )
 
-const (
-	workers = 2
-	itemsPerWorker = 1000
-)
-func main () {
-	fmt.Print("Total Items Packed : ", PackItems(0))
-}
+func main() {
+	mut := sync.Mutex{}
+	for i := 0; i < 100; i++ {
+		fmt.Println("Total Items Packed:", PackItemsWithMutex(&mut, 0))
 
-func PackItems (totalItems int) int {
-	
+	}
+}
+func PackItems(totalItems int) int {
+	const workers = 2
+	const itemsPerWorker = 1000
 	var wg sync.WaitGroup
-	wg.Add(workers)
 	itemsPacked := 0
 	for i := 0; i < workers; i++ {
-		// wg.Add(1)
-		go func(workerId int) {
+		wg.Add(1)
+		go func(workerID int) {
 			defer wg.Done()
+			// Simulate the worker packing items into boxes.
 			for j := 0; j < itemsPerWorker; j++ {
-				itemsPacked ++
+				itemsPacked = totalItems
+				// Simulate packing an item.
+				itemsPacked++
+				// Update the total items packed without proper synchronization.
 				totalItems = itemsPacked
 			}
 		}(i)
 	}
+	// Wait for all workers to finish.
 	wg.Wait()
-	return itemsPacked
+	return totalItems
+}
+
+func PackItemsWithMutex(m *sync.Mutex, totalItems int) int {
+	const workers = 2
+	const itemsPerWorker = 1000
+	var wg sync.WaitGroup
+	for i := 0; i < workers; i++ {
+		wg.Add(1)
+		go func(workerId int) {
+			defer wg.Done()
+			for j := 0; j < itemsPerWorker; j++ {
+				m.Lock()
+				itemsPacked := totalItems
+				itemsPacked++
+				totalItems = itemsPacked
+				m.Unlock()
+			}
+		}(i)
+	}
+
+	wg.Wait()
+	return totalItems
 }
