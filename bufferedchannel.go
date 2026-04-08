@@ -10,7 +10,7 @@ import (
 func main() {
 	fmt.Println("Looking at buffered channels")
 
-	clownChannel := make(chan int, 3)
+	clownChannel := make(chan int, 3) // wait and receive up to 3 values before send starts blocking
 	clowns := 5
 
 	var wg sync.WaitGroup
