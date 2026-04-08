@@ -9,7 +9,6 @@ func main() {
 	mut := sync.Mutex{}
 	for i := 0; i < 100; i++ {
 		fmt.Println("Total Items Packed:", PackItemsWithMutex(&mut, 0))
-
 	}
 }
 func PackItems(totalItems int) int {
@@ -39,17 +38,17 @@ func PackItems(totalItems int) int {
 func PackItemsWithMutex(m *sync.Mutex, totalItems int) int {
 	const workers = 2
 	const itemsPerWorker = 1000
-	var wg sync.WaitGroup
+	var wg sync.WaitGroup // this is used to wait for the go routines to finish before the main thread executes.
 	for i := 0; i < workers; i++ {
 		wg.Add(1)
 		go func(workerId int) {
-			defer wg.Done()
+			defer wg.Done() // making this go routine register to the waitgroup. this process in this go-routine has to finish.
 			for j := 0; j < itemsPerWorker; j++ {
-				m.Lock()
+				m.Lock() // this is to prevent data races, basically locking thr variable in memory 
 				itemsPacked := totalItems
 				itemsPacked++
 				totalItems = itemsPacked
-				m.Unlock()
+				m.Unlock() // this is use to unlock so that another process can access the variable.
 			}
 		}(i)
 	}
